@@ -1,4 +1,5 @@
 import Layout from "./layouts/Layout";
+import HomePage from "./pages/HomePage";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 const AppRoutes = () => {
@@ -8,7 +9,7 @@ const AppRoutes = () => {
         path="/"
         element={
           <Layout>
-            <span>HOME PAGE</span>
+            <HomePage />
           </Layout>
         }
       />
