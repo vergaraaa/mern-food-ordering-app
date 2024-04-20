@@ -2,6 +2,12 @@ import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
 import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+
+// db connection
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then(() => {
+  console.log("db connected");
+});
 
 // init app
 const app = express();
