@@ -1,8 +1,9 @@
 import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
+import express from "express";
 import mongoose from "mongoose";
-import express, { Request, Response } from "express";
+import myUserRoutes from "./routes/my-user";
 
 // db connection
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then(() => {
@@ -20,10 +21,8 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-//test route
-app.get("/test", async (req: Request, res: Response) => {
-  res.json({ message: "Hello!" });
-});
+// routes
+app.use("/api/my-user", myUserRoutes);
 
 // server listening
 app.listen(app.get("port"), () => {
