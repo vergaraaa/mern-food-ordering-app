@@ -1,12 +1,18 @@
 import { Router } from "express";
-import { jwtCheck, jwtParse } from "../middlewares/auth";
 import {
   validateCreateCurrentUser,
   validateUpdateCurrentUser,
 } from "../validation/my-user";
-import { createCurrentUser, updateCurrentUser } from "../controllers/my-user";
+import {
+  createCurrentUser,
+  getCurrentUser,
+  updateCurrentUser,
+} from "../controllers/my-user";
+import { jwtCheck, jwtParse } from "../middlewares/auth";
 
 const router = Router();
+
+router.get("/", jwtCheck, jwtParse, getCurrentUser);
 
 router.post("/", jwtCheck, validateCreateCurrentUser, createCurrentUser);
 

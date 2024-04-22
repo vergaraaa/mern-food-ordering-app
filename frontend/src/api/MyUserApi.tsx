@@ -1,6 +1,6 @@
+import { toast } from "sonner";
 import { useMutation } from "react-query";
 import { useAuth0 } from "@auth0/auth0-react";
-import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
