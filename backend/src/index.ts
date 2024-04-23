@@ -3,11 +3,19 @@ import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import myUserRoutes from "./routes/my-user";
+import { v2 as cloudinary } from "cloudinary";
 import express, { Request, Response } from "express";
 
 // db connection
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then(() => {
   console.log("db connected");
+});
+
+// cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // init app
