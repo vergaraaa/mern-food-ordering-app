@@ -1,8 +1,14 @@
 import { z } from "zod";
+import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import DetailsSection from "./DetailsSection";
+import { Button } from "@/components/ui/button";
+import CuisinesSection from "./CuisinesSection";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "@/components/ui/separator";
+import LoadingButton from "@/components/LoadingButton";
 
 const formSchema = z.object({
   restaurantName: z.string({ required_error: "Restaurant name is required" }),
@@ -59,6 +65,14 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
       >
         <DetailsSection />
+        <Separator />
+        <CuisinesSection />
+        <Separator />
+        <MenuSection />
+        <Separator />
+        <ImageSection />
+
+        {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
       </form>
     </Form>
   );
