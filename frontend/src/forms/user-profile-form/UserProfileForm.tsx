@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { User } from "@/types";
+import { UserType } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,7 +43,7 @@ const formSchema = z.object({
 type UserFormData = z.infer<typeof formSchema>;
 
 type Props = {
-  currentUser: User;
+  currentUser: UserType;
   onSave: (userProfileDate: UserFormData) => void;
   isLoading: boolean;
 };
