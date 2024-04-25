@@ -1,7 +1,12 @@
+import { useCreateMyRestaurant } from "@/api/MyRestaurantApi";
 import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestaurantForm";
 
 const ManageRestaurantPage = () => {
-  return <ManageRestaurantForm />;
+  const { createMyRestaurant, isLoading } = useCreateMyRestaurant();
+
+  return (
+    <ManageRestaurantForm onSave={createMyRestaurant} isLoading={isLoading} />
+  );
 };
 
 export default ManageRestaurantPage;
