@@ -1,7 +1,10 @@
 import multer from "multer";
 import { Router } from "express";
 import { jwtCheck, jwtParse } from "../middlewares/auth";
-import { createMyRestaurant } from "../controllers/my-restaurant";
+import {
+  createMyRestaurant,
+  getMyRestaurant,
+} from "../controllers/my-restaurant";
 import { validateCreateMyRestaurant } from "../validation/my-restaurant";
 
 const router = Router();
@@ -13,6 +16,8 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
+
+router.get("/", jwtCheck, jwtParse, getMyRestaurant);
 
 router.post(
   "/",
