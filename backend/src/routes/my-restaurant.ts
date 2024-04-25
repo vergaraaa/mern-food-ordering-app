@@ -4,6 +4,7 @@ import { jwtCheck, jwtParse } from "../middlewares/auth";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  updateMyRestaurant,
 } from "../controllers/my-restaurant";
 import { validateCreateMyRestaurant } from "../validation/my-restaurant";
 
@@ -26,6 +27,15 @@ router.post(
   jwtCheck,
   jwtParse,
   createMyRestaurant
+);
+
+router.put(
+  "/",
+  upload.single("imageFile"),
+  validateCreateMyRestaurant,
+  jwtCheck,
+  jwtParse,
+  updateMyRestaurant
 );
 
 export default router;
