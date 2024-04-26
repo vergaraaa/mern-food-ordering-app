@@ -5,6 +5,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
+import SearchPage from "./pages/SearchPage";
 
 const AppRoutes = () => {
   return (
@@ -17,7 +18,17 @@ const AppRoutes = () => {
           </Layout>
         }
       />
+
       <Route path="/auth-callback" element={<AuthCallbackPage />} />
+
+      <Route
+        path="/search/:city"
+        element={
+          <Layout showHero={false}>
+            <SearchPage />
+          </Layout>
+        }
+      />
 
       <Route element={<ProtectedRoute />}>
         <Route
