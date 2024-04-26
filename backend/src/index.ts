@@ -4,6 +4,7 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import myUserRoutes from "./routes/my-user";
 import { v2 as cloudinary } from "cloudinary";
+import restaurantsRoutes from "./routes/restaurants";
 import express, { Request, Response } from "express";
 import myRestaurantsRoutes from "./routes/my-restaurant";
 
@@ -37,6 +38,7 @@ app.get("/health", async (req: Request, res: Response) => {
 
 // routes
 app.use("/api/my-user", myUserRoutes);
+app.use("/api/restaurants", restaurantsRoutes);
 app.use("/api/my-restaurant", myRestaurantsRoutes);
 
 // server listening
