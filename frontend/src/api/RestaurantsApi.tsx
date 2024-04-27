@@ -1,13 +1,20 @@
+import { SearchState } from "@/pages/SearchPage";
 import { RestaurantsSearchResponse } from "@/types";
 import { useQuery } from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useSearchRestaurants = (city?: string) => {
+export const useSearchRestaurants = (
+  searchState: SearchState,
+  city?: string
+) => {
   const searchRestaurantsRequest =
     async (): Promise<RestaurantsSearchResponse> => {
+      const params = new URLSearchParams();
+      params.set("searchQuery", searchState.searchQuery);
+
       const response = await fetch(
-        `${API_BASE_URL}/api/restaurants/search/${city}`
+        `${API_BASE_URL}/api/restaurants/search/${city}?${params.toString()}`
       );
 
       if (!response.ok) {
@@ -18,7 +25,9 @@ export const useSearchRestaurants = (city?: string) => {
     };
 
   const { data: results, isLoading } = useQuery(
-    "searchRestaurants",
+    // tell use query hook that any time searchState object values change
+    // to do the query again, kinda like a useEffect dependency
+    ["searchRestaurants", searchState],
     searchRestaurantsRequest,
     { enabled: !!city }
   );
