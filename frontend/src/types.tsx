@@ -13,6 +13,7 @@ export type MenuItemType = {
 };
 
 export type RestaurantType = {
+  _id: string;
   user: string;
   restaurantName: string;
   city: string;
