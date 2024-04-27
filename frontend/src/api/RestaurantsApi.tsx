@@ -12,6 +12,7 @@ export const useSearchRestaurants = (
     async (): Promise<RestaurantsSearchResponse> => {
       const params = new URLSearchParams();
       params.set("searchQuery", searchState.searchQuery);
+      params.set("page", searchState.page.toString());
 
       const response = await fetch(
         `${API_BASE_URL}/api/restaurants/search/${city}?${params.toString()}`
