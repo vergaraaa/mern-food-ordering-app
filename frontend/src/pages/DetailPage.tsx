@@ -54,6 +54,26 @@ const DetailPage = () => {
     });
   };
 
+  const deleteFromCart = (cartItem: CartItem) => {
+    setCartItems((prevCartItems) => {
+      let updatedCartItems: CartItem[];
+
+      if (cartItem.quantity === 1) {
+        updatedCartItems = prevCartItems.filter(
+          (item) => cartItem._id !== item._id
+        );
+      } else {
+        updatedCartItems = prevCartItems.map((item) =>
+          cartItem._id === item._id
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
+        );
+      }
+
+      return updatedCartItems;
+    });
+  };
+
   if (isLoading || !restaurant) {
     return <span>Loading...</span>;
   }
@@ -83,7 +103,11 @@ const DetailPage = () => {
 
         <div>
           <Card>
-            <OrderSummary restaurant={restaurant} cartItems={cartItems} />
+            <OrderSummary
+              restaurant={restaurant}
+              cartItems={cartItems}
+              deleteFromCart={deleteFromCart}
+            />
           </Card>
         </div>
       </div>

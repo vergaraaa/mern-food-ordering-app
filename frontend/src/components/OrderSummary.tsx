@@ -1,21 +1,25 @@
-import { CartItem } from "@/pages/DetailPage";
-import { RestaurantType } from "@/types";
-import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Item } from "@radix-ui/react-dropdown-menu";
+import { Trash } from "lucide-react";
+import { RestaurantType } from "@/types";
 import { Separator } from "./ui/separator";
+import { CartItem } from "@/pages/DetailPage";
+import { Item } from "@radix-ui/react-dropdown-menu";
+import { CardContent, CardHeader, CardTitle } from "./ui/card";
 
 type Props = {
   restaurant: RestaurantType;
   cartItems: CartItem[];
+  deleteFromCart: (cartItem: CartItem) => void;
 };
 
-const OrderSummary = ({ restaurant, cartItems }: Props) => {
+const OrderSummary = ({ restaurant, cartItems, deleteFromCart }: Props) => {
   const getTotalCost = () => {
     const totalInPence = cartItems.reduce(
-      (total, cartItem) => total + (cartItem.price + cartItem.quantity),
+      (total, cartItem) => total + cartItem.price * cartItem.quantity,
       0 // inital total value
     );
+
+    console.log(totalInPence);
 
     const totalWithDelivery = totalInPence + restaurant.deliveryPrice;
 
@@ -39,6 +43,12 @@ const OrderSummary = ({ restaurant, cartItems }: Props) => {
                 {Item.name}
               </span>
               <span className="flex items-center gap-1">
+                <Trash
+                  className="cursor-pointer"
+                  color="red"
+                  size={20}
+                  onClick={() => deleteFromCart(cartItem)}
+                />
                 ${((cartItem.price * cartItem.quantity) / 100).toFixed(2)}
               </span>
             </div>
