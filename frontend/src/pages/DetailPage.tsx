@@ -8,6 +8,7 @@ import { useGetRestaurant } from "@/api/RestaurantsApi";
 import RestaurantInfo from "@/components/RestaurantInfo";
 import CheckoutButton from "@/components/CheckoutButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 
 export type CartItem = {
   _id: string;
@@ -89,6 +90,10 @@ const DetailPage = () => {
     });
   };
 
+  const onCheckout = (userFormData: UserFormData) => {
+    console.log("userFormData", userFormData);
+  };
+
   if (isLoading || !restaurant) {
     return <span>Loading...</span>;
   }
@@ -125,7 +130,10 @@ const DetailPage = () => {
               deleteFromCart={deleteFromCart}
             />
             <CardFooter>
-              <CheckoutButton />
+              <CheckoutButton
+                onCheckout={onCheckout}
+                disabled={cartItems.length === 0}
+              />
             </CardFooter>
           </Card>
         </div>
