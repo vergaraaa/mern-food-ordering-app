@@ -1,14 +1,16 @@
-import { model, Schema, Types } from "mongoose";
+import { InferSchemaType, model, Schema, Types } from "mongoose";
 
-export type MenuItemType = {
-  name: string;
-  price: number;
-};
-
-const menuItemSchema = new Schema<MenuItemType>({
+const menuItemSchema = new Schema({
+  _id: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    default: () => new Types.ObjectId(),
+  },
   name: { type: String, required: true },
   price: { type: Number, required: true },
 });
+
+export type MenuItemType = InferSchemaType<typeof menuItemSchema>;
 
 export type RestaurantType = {
   user: Types.ObjectId;
