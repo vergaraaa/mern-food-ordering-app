@@ -9,6 +9,10 @@ import RestaurantInfo from "@/components/RestaurantInfo";
 import CheckoutButton from "@/components/CheckoutButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
+import {
+  CheckoutSessionRequest,
+  useCreateCheckoutSession,
+} from "@/api/OrderApi";
 
 export type CartItem = {
   _id: string;
@@ -20,6 +24,8 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+  const { createCheckoutSession, isLoading: isCheckoutLoading } =
+    useCreateCheckoutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -90,8 +96,28 @@ const DetailPage = () => {
     });
   };
 
-  const onCheckout = (userFormData: UserFormData) => {
-    console.log("userFormData", userFormData);
+  const onCheckout = async (userFormData: UserFormData) => {
+    if (!restaurant) {
+      return;
+    }
+
+    const checkoutData: CheckoutSessionRequest = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      restaurantId: restaurant?._id,
+      deliveryDetails: {
+        name: userFormData.name,
+        addressLine1: userFormData.addressLine1,
+        city: userFormData.city,
+        email: userFormData.email as string,
+      },
+    };
+
+    const data = await createCheckoutSession(checkoutData);
+    window.location.href = data.url;
   };
 
   if (isLoading || !restaurant) {
@@ -133,6 +159,7 @@ const DetailPage = () => {
               <CheckoutButton
                 onCheckout={onCheckout}
                 disabled={cartItems.length === 0}
+                isLoading={isCheckoutLoading}
               />
             </CardFooter>
           </Card>
