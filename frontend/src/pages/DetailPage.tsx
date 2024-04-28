@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { MenuItemType } from "@/types";
-import { Card } from "@/components/ui/card";
 import MenuItem from "@/components/MenuItem";
 import { useParams } from "react-router-dom";
 import OrderSummary from "@/components/OrderSummary";
+import { Card, CardFooter } from "@/components/ui/card";
 import { useGetRestaurant } from "@/api/RestaurantsApi";
 import RestaurantInfo from "@/components/RestaurantInfo";
+import CheckoutButton from "@/components/CheckoutButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export type CartItem = {
@@ -19,7 +20,11 @@ const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
 
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
@@ -50,6 +55,11 @@ const DetailPage = () => {
         ];
       }
 
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
+
       return updatedCartItems;
     });
   };
@@ -58,17 +68,22 @@ const DetailPage = () => {
     setCartItems((prevCartItems) => {
       let updatedCartItems: CartItem[];
 
-      if (cartItem.quantity === 1) {
+      const updatedCarItem = { ...cartItem, quantity: cartItem.quantity - 1 };
+
+      if (updatedCarItem.quantity === 0) {
         updatedCartItems = prevCartItems.filter(
           (item) => cartItem._id !== item._id
         );
       } else {
         updatedCartItems = prevCartItems.map((item) =>
-          cartItem._id === item._id
-            ? { ...cartItem, quantity: cartItem.quantity - 1 }
-            : cartItem
+          cartItem._id === item._id ? updatedCarItem : item
         );
       }
+
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
 
       return updatedCartItems;
     });
@@ -95,6 +110,7 @@ const DetailPage = () => {
 
           {restaurant.menuItems.map((menuItem) => (
             <MenuItem
+              key={menuItem._id}
               menuItem={menuItem}
               addToCart={() => addToCart(menuItem)}
             />
@@ -108,6 +124,9 @@ const DetailPage = () => {
               cartItems={cartItems}
               deleteFromCart={deleteFromCart}
             />
+            <CardFooter>
+              <CheckoutButton />
+            </CardFooter>
           </Card>
         </div>
       </div>

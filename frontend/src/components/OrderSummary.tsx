@@ -3,7 +3,6 @@ import { Trash } from "lucide-react";
 import { RestaurantType } from "@/types";
 import { Separator } from "./ui/separator";
 import { CartItem } from "@/pages/DetailPage";
-import { Item } from "@radix-ui/react-dropdown-menu";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 
 type Props = {
@@ -19,8 +18,6 @@ const OrderSummary = ({ restaurant, cartItems, deleteFromCart }: Props) => {
       0 // inital total value
     );
 
-    console.log(totalInPence);
-
     const totalWithDelivery = totalInPence + restaurant.deliveryPrice;
 
     return (totalWithDelivery / 100).toFixed(2);
@@ -35,12 +32,12 @@ const OrderSummary = ({ restaurant, cartItems, deleteFromCart }: Props) => {
         </CardTitle>
         <CardContent className="flex flex-col gap-5 p-0">
           {cartItems.map((cartItem) => (
-            <div className="flex justify-between">
+            <div key={cartItem._id} className="flex justify-between">
               <span>
                 <Badge variant="outline" className="mr-2">
                   {cartItem.quantity}
                 </Badge>
-                {Item.name}
+                {cartItem.name}
               </span>
               <span className="flex items-center gap-1">
                 <Trash
