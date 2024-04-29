@@ -27,6 +27,9 @@ const app = express();
 // settings
 app.set("port", 3000 || process.env.PORT);
 
+// stripe webhook
+app.use("/api/orders/checkout/webhook", express.raw({ type: "*/*" }));
+
 // middlewares
 app.use(cors());
 app.use(morgan("dev"));
