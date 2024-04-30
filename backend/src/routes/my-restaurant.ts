@@ -4,6 +4,7 @@ import { jwtCheck, jwtParse } from "../middlewares/auth";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  getMyRestaurantOrders,
   updateMyRestaurant,
 } from "../controllers/my-restaurant";
 import { validateCreateMyRestaurant } from "../validation/my-restaurant";
@@ -17,6 +18,8 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
+
+router.get("/orders", jwtCheck, jwtParse, getMyRestaurantOrders);
 
 router.get("/", jwtCheck, jwtParse, getMyRestaurant);
 

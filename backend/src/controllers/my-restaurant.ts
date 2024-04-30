@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import cloudinary from "cloudinary";
+import Order from "../models/order";
 import { Request, Response } from "express";
 import Restaurant from "../models/restaurant";
 
@@ -99,4 +100,26 @@ const uploadImage = async (file: Express.Multer.File): Promise<string> => {
   const uploadResponse = await cloudinary.v2.uploader.upload(dataURI);
 
   return uploadResponse.url;
+};
+
+export const getMyRestaurantOrders = async (req: Request, res: Response) => {
+  try {
+    const restaurant = await Restaurant.findOne({ user: req.userId });
+
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    const orders = await Order.find({ restaurant: restaurant._id })
+      .populate("restaurant")
+      .populate("user");
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Error getting my restaurant orders",
+    });
+  }
 };
