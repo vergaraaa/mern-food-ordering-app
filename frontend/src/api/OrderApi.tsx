@@ -9,7 +9,7 @@ export const useGetMyOrders = () => {
   const { getAccessTokenSilently } = useAuth0();
 
   const getMyOrdersRequest = async (): Promise<OrderType[]> => {
-    const accessToken = getAccessTokenSilently();
+    const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/orders`, {
       method: "GET",
