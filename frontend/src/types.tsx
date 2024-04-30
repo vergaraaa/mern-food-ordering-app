@@ -40,8 +40,8 @@ export type OrderStatus =
   | "placed"
   | "paid"
   | "inProgress"
-  | "outForDelivey"
-  | "delivererd";
+  | "outForDelivery"
+  | "delivered";
 
 export type OrderType = {
   _id: string;
@@ -58,7 +58,7 @@ export type OrderType = {
     city: string;
     email: string;
   };
-  totalNumber: number;
+  totalAmount: number;
   status: OrderStatus;
   createdAt: string;
   restaurantId: string;

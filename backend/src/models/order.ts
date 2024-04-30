@@ -23,7 +23,7 @@ const orderSchema = new Schema({
   totalAmount: Number,
   status: {
     type: String,
-    enum: ["placed", "paid", "inProgress", "outForDelivey", "delivererd"],
+    enum: ["placed", "paid", "inProgress", "outForDelivery", "delivered"],
   },
   createdAt: { type: Date, default: Date.now },
 });
