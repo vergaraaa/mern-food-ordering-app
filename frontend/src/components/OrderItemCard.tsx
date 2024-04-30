@@ -1,6 +1,6 @@
 import { Label } from "./ui/label";
 import { Badge } from "./ui/badge";
-import { OrderType } from "@/types";
+import { OrderStatus, OrderType } from "@/types";
 import { Separator } from "./ui/separator";
 import {
   Select,
@@ -11,12 +11,30 @@ import {
 } from "./ui/select";
 import { ORDER_STATUS } from "@/config/order-status-config";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { useUpdateMyRestaurantOrder } from "@/api/MyRestaurantApi";
+import { useEffect, useState } from "react";
 
 type Props = {
   order: OrderType;
 };
 
 const OrderItemCard = ({ order }: Props) => {
+  const { updateRestaurantOrderStatus, isLoading } =
+    useUpdateMyRestaurantOrder();
+  const [status, setStatus] = useState<OrderStatus>(order.status);
+
+  useEffect(() => {
+    setStatus(order.status);
+  }, [order.status]);
+
+  const handleStatusChange = async (newStatus: OrderStatus) => {
+    await updateRestaurantOrderStatus({
+      orderId: order._id,
+      status: newStatus,
+    });
+    setStatus(newStatus);
+  };
+
   const getTime = () => {
     const orderDateTime = new Date(order.createdAt);
 
@@ -27,6 +45,7 @@ const OrderItemCard = ({ order }: Props) => {
 
     return `${hours}:${paddedMinutes}`;
   };
+
   return (
     <Card>
       <CardHeader>
@@ -62,7 +81,7 @@ const OrderItemCard = ({ order }: Props) => {
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           {order.cartItems.map((cartItem) => (
-            <span>
+            <span key={cartItem.name}>
               <Badge variant="outline" className="mr-2">
                 {cartItem.quantity}
               </Badge>
@@ -72,7 +91,11 @@ const OrderItemCard = ({ order }: Props) => {
         </div>
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="status">What is the status of this order?</Label>
-          <Select>
+          <Select
+            value={status}
+            disabled={isLoading}
+            onValueChange={(value) => handleStatusChange(value as OrderStatus)}
+          >
             <SelectTrigger id="status">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
