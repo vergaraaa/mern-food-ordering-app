@@ -28,7 +28,10 @@ export const useGetMyOrders = () => {
 
   const { data: orders, isLoading } = useQuery(
     "getMyOrders",
-    getMyOrdersRequest
+    getMyOrdersRequest,
+    {
+      refetchInterval: 5000,
+    }
   );
 
   return {
