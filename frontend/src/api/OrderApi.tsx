@@ -1,8 +1,41 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation } from "react-query";
 import { toast } from "sonner";
+import { OrderType } from "@/types";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useMutation, useQuery } from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export const useGetMyOrders = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getMyOrdersRequest = async (): Promise<OrderType[]> => {
+    const accessToken = getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/orders`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to create checkout session");
+    }
+
+    return await response.json();
+  };
+
+  const { data: orders, isLoading } = useQuery(
+    "getMyOrders",
+    getMyOrdersRequest
+  );
+
+  return {
+    orders,
+    isLoading,
+  };
+};
 
 export type CheckoutSessionRequest = {
   cartItems: {
