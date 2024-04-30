@@ -1,8 +1,7 @@
+import { Label } from "./ui/label";
+import { Badge } from "./ui/badge";
 import { OrderType } from "@/types";
 import { Separator } from "./ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Label } from "./ui/label";
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { ORDER_STATUS } from "@/config/order-status-config";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 type Props = {
   order: OrderType;
